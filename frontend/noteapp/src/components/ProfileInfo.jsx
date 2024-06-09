@@ -4,7 +4,7 @@ import { getinitials } from "../utils/helper";
 const ProfileInfo = ({onLogout}) => {
   return (
     <div className="flex items-center gap-3">
-      <div className="text-black w-9 h-9 flex items-center justify-center rounded-full bg-slate-200">
+      <div className=" hidden lg:flex text-black w-9 h-9  items-center justify-center rounded-full bg-slate-200">
               {getinitials("Vicky")}
       </div>
 
