@@ -16,10 +16,10 @@ const Navbar = () => {
 
   const handleSearch = () => { };
   return (
-      <div className="flex items-center justify-between bg-sky-700 drop-shadow-md py-2 px-6 rounded-b-md">
+      <div className="flex items-center justify-between bg-sky-800 drop-shadow-md py-2 px-6 rounded-b-md">
           <div className='flex gap-3'>
               
-          <img src={TodoLogo} alt="logo" className="h-10 w-10"/> 
+          <img src={TodoLogo} alt="logo" className=" h-10 w-10"/> 
           <h1 className="hidden lg:flex text-blue-100 font-semibold text-2xl py-2">Taskin</h1>
       </div>
       <SearchBar value={query}
