@@ -1,15 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import PasswordInput from "../components/PasswordInput";
 import { validateEmail } from "../utils/helper";
 import { useState } from "react";
+import axiosInstance from "../utils/axiosInstance";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  const handleLogin = (e) => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (!validateEmail(email)) {
       setError("Invalid email address");
@@ -19,11 +22,28 @@ const Login = () => {
       setError("Password is required");
       return;
     }
-    setError(null);
+    setError("");
+
+    try {
+      const response = await axiosInstance.post("/login", {
+        email: email,
+        password: password,
+      })
+
+      if(response.data && response.data.accessToken){
+        localStorage.setItem("token", response.data.accessToken);
+        navigate("/dashboard");
+      }
+    }
+    catch (error) {
+      
+      console.log(error.response.data)
+      setError(error.response.data)
+    }
   };
   return (
     <div>
-      <Navbar />
+      <Navbar  />
 
       <div className="flex items-center justify-center mt-20 p-5">
         <div className="w-96 border border-blue-950 bg-sky-700 rounded-md py-7 px-7 ">
@@ -41,7 +61,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
                       />
                       
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-cyan-300 text-sm">{error}</p>}
             <button className="btn-primary">Login</button>
             <p className="text-white text-sm mt-2">
               Donot have an account?

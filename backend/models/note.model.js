@@ -6,6 +6,7 @@ const noteSchema = new Schema({
   title: {
     type: String,
     required: true,
+    default: "Place you title here",
   },
   content: {
     type: String,

@@ -1,4 +1,5 @@
 import { Pin, Pencil, Trash } from "lucide-react";
+import moment from "moment";
 
 const NoteCard = ({
   title,
@@ -15,17 +16,23 @@ const NoteCard = ({
       <div className="flex items-center justify-between">
         <div>
           <h5 className="text-md font-medium">{title}</h5>
-          <span className="text-xs text-slate-500">{date}</span>
+          <span className="text-xs text-slate-500">
+            {moment(date).format("DD MM YYYY")}
+          </span>
         </div>
 
-        <Pin onClick={onPinNote}          size={20}
+        <Pin
+          onClick={onPinNote}
+          size={20}
           className={`icon-btn ${isPinned ? "text-cyan-500" : "text-black"}`}
         />
       </div>
-      <p className="flex items-center justify-between mt-2">{content?.slice(0, 40)}</p>
+      <p className="flex items-center justify-between mt-2">
+        {content?.slice(0, 40)}
+      </p>
 
       <div className="text-xs text-slate-500">
-        <div>{tags}</div>
+        <div>{tags.map((item)=> `#${item}`)}</div>
 
         <div className="flex items-center gap-2 mt-5">
           <Pencil

@@ -1,33 +1,55 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
 import PasswordInput from "../components/PasswordInput";
 import { validateEmail } from "../utils/helper";
+import axiosInstance from "../utils/axiosInstance";
 
 const Signup = () => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-    const handleSignup = (e) => {
-        e.preventDefault();
-        
-        if (!name) {
-            setError("Name is required");
-            return;
-        }
+  const navigate = useNavigate();
 
-        if(!validateEmail(email)) {
-            setError("Invalid email address");
-            return;
-        }
+  const handleSignup = async (e) => {
+    e.preventDefault();
 
-        if (!password) {
-            setError("Password is required");
-            return;
-        }
+    if (!name) {
+      setError("Name is required");
+      return;
     }
+
+    if (!validateEmail(email)) {
+      setError("Invalid email address");
+      return;
+    }
+
+    if (!password) {
+      setError("Password is required");
+      return;
+    }
+
+    try {
+      const response = await axiosInstance.post("/create-account", {
+        fullName: name,
+        email: email,
+        password: password,
+      });
+      if (response.data) {
+        setError(response.data);  
+       }
+
+
+      if (response.data && response.data.accessToken) {
+        localStorage.setItem("token", response.data.accessToken);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      setError(error.response.data);
+    }
+  };
 
   return (
     <div>
@@ -54,8 +76,10 @@ const Signup = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button type="submit" className="btn-primary">Sign Up</button>
+            {error && <p className="text-cyan-300 text-sm">{error}</p>}
+            <button type="submit" className="btn-primary">
+              Sign Up
+            </button>
             <p className="text-white text-sm mt-2">
               Have an account
               <Link
@@ -70,6 +94,6 @@ const Signup = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Signup
+export default Signup;

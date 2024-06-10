@@ -99,7 +99,7 @@ app.get("/get-user", authenticateToken, async (req, res) => {
         return;
     }
     return res.json({
-        user: {fullName: isUser.fullName, email: isUser.email},
+        user: { fullName: isUser.fullName, email: isUser.email, _id: isUser._id, createdOn: isUser.createdOn },
         error: false, user, message: "User fetched successfully"
     });
  })
@@ -177,8 +177,8 @@ app.get("/get-notes", authenticateToken, async (req, res) => {
     const { user } = req.user;
     try {
         
-        const notes = await Note.find({ userId: user._id });
-        return res.json({ error: false, notes, message: "Notes fetched successfully" });
+        const note = await Note.find({ userId: user._id });
+        return res.json({ error: false, note, message: "Notes fetched successfully" });
     }
     catch (error) {
         return res.status(500).json({

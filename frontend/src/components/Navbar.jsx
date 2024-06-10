@@ -3,10 +3,11 @@ import TodoLogo from '../assets/Todologo.png'
 import ProfileInfo from './ProfileInfo'
 import SearchBar from './SearchBar'
 import { useState } from 'react'
-const Navbar = () => {
+const Navbar = ({user}) => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const onLogout = () => {
+    localStorage.clear();
     navigate('/login');
   }
 
@@ -28,9 +29,10 @@ const Navbar = () => {
         }}
         handleSearch={handleSearch}
         onClearSearch={onClearSearch}
+        user={user}
 
       />
-      <ProfileInfo onLogout={onLogout} />
+      <ProfileInfo user={user} onLogout={onLogout} />
     </div>
   )
 }
