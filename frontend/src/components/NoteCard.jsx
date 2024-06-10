@@ -17,7 +17,7 @@ const NoteCard = ({
         <div>
           <h5 className="text-md font-medium">{title}</h5>
           <span className="text-xs text-slate-500">
-            {moment(date).format("DD MM YYYY")}
+            {moment(date).format("Do MMMM YYYY")}
           </span>
         </div>
 

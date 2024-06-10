@@ -3,7 +3,8 @@ import TodoLogo from '../assets/Todologo.png'
 import ProfileInfo from './ProfileInfo'
 import SearchBar from './SearchBar'
 import { useState } from 'react'
-const Navbar = ({user}) => {
+const Navbar = ({ user, onSearch, handleXSearch }) => {
+  
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const onLogout = () => {
@@ -12,10 +13,16 @@ const Navbar = ({user}) => {
   }
 
   const onClearSearch = () => { 
+    handleXSearch();
     setQuery('');
   }
+  const handleSearch = () => {
+    if (query) {
+      onSearch(query);
+    }
+   };
 
-  const handleSearch = () => { };
+
   return (
       <div className="flex items-center justify-between bg-sky-800 drop-shadow-md py-2 px-6 rounded-b-md">
           <div className='flex gap-3'>

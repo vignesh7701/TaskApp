@@ -7,6 +7,8 @@ import Modal from "react-modal"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
+import EmptyCard from "../components/EmptyCard";
+import BgDefault from "../assets/BgImage.png";
 
 
 
@@ -27,7 +29,7 @@ const Home = () => {
   const showToast = (message, type) => { 
     setToast({ isShown: true, message, type });
   }
-
+  const [search, setSearch] = useState(false)
   const [user, setUser] = useState(null);
   const [notes, setNotes] = useState([]);
 
@@ -82,6 +84,47 @@ const Home = () => {
   }
 
 
+  const onSearch = async (query) => {
+    try {
+      const response = await axiosInstance.get("/search-notes", {
+        params: {query},
+      })
+    
+    if (response.data && response.data.notes) { 
+    setSearch(true);
+    setNotes(response.data.notes);
+    }
+    }
+    catch (error) {
+      console.log(error); 
+    }
+  }
+
+  const handleXSearch = () => {
+    setSearch(false);
+    getAllNotes();
+  }
+  
+  const updatePin = async (noteData) => { 
+    const noteId = noteData._id;
+
+    try {
+      const response = await axiosInstance.put(
+        "/update-note-pin-status/" + noteId,
+        {
+        isPinned: !noteId.isPinned
+        }
+      );
+      if (response.data && response.data.note) {
+        showToast("Pin Updated");
+        getAllNotes();
+      }
+    } catch (error) {
+      console.log("error pinnig");
+    }
+  }
+
+
   useEffect(() => {
     getAllNotes();
     getUser();
@@ -91,9 +134,9 @@ const Home = () => {
 
   return (
     <>
-      <Navbar user={user} />
+      <Navbar user={user} onSearch={onSearch} handleXSearch={handleXSearch} />
       <div className="container mx-auto p-3">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-10">
+        {notes.length > 0 ? (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-10">
           {notes.map((item) => (
             <NoteCard
               key={item._id}
@@ -104,10 +147,10 @@ const Home = () => {
               tags={item.tags}
               onEdit={() => handleEdit(item)}
               onDelete={() => deleteNote(item)}
-              onPinNote={() => {}}
+              onPinNote={() => updatePin(item)}
             />
           ))}
-        </div>
+        </div>) : (<EmptyCard ImgSrc={BgDefault} notes={notes} />)}
       </div>
 
       <button
