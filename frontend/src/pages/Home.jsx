@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar"
 import NoteCard from "../components/NoteCard"
+import Toast from "../components/Toast";
 import {Plus } from "lucide-react";
 import AddNotes from "./AddNotes";
 import Modal from "react-modal"
@@ -17,10 +18,25 @@ const Home = () => {
     data: null,
   })
 
+  const [toast, setToast] = useState({
+    isShown: false,
+    message: "",
+    type:"add",
+  });
+
+  const showToast = (message, type) => { 
+    setToast({ isShown: true, message, type });
+  }
+
   const [user, setUser] = useState(null);
   const [notes, setNotes] = useState([]);
 
   const navigate = useNavigate();
+
+
+  const handleEdit = (noteDetails) => {
+    setOpenModel({ isShow: true, type: "edit", data: noteDetails });
+  }
 
   const getUser = async () => {
     try {
@@ -50,13 +66,26 @@ const Home = () => {
     }
   }
 
-
+  const deleteNote = async (data) => { 
+    const noteId = data._id;
+    try {
+      const response = await axiosInstance.delete("/delete-note/" + noteId);
+      if (response.data) {
+        showToast("Note deleted successfully", "delete");
+        getAllNotes();
+      }
+    }
+    catch (error) {
+      console.log(error.response.data);
+    }
   
+  }
+
 
   useEffect(() => {
     getAllNotes();
     getUser();
-    return () => console.log("Cleanup");
+    
   }, []);
 
 
@@ -73,8 +102,8 @@ const Home = () => {
               content={item.content}
               isPinned={item.isPinned}
               tags={item.tags}
-              onEdit={() => {}}
-              onDelete={() => {}}
+              onEdit={() => handleEdit(item)}
+              onDelete={() => deleteNote(item)}
               onPinNote={() => {}}
             />
           ))}
@@ -109,8 +138,16 @@ const Home = () => {
             setOpenModel({ isShow: false, type: "add", data: null });
           }}
           getAllNotes={getAllNotes}
+          showToast={showToast}
         />
       </Modal>
+
+      <Toast
+        isShown={toast.isShown}
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ isShown: false, message: "" })}
+      />
     </>
   );
 }

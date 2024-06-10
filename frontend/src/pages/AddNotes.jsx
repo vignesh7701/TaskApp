@@ -3,10 +3,10 @@ import { X } from "lucide-react";
 import TagInput from "../components/TagInput";
 import axiosInstance from "../utils/axiosInstance";
 
-const AddNotes = ({ onclose, type , getAllNotes }) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [tags, setTags] = useState("");
+const AddNotes = ({  noteData, onclose, type , getAllNotes, showToast }) => {
+  const [title, setTitle] = useState(noteData?.title || "");
+  const [content, setContent] = useState(noteData?.content || "");
+  const [tags, setTags] = useState(noteData?.tags || []);
   const [error, setError] = useState(null);
 
   const addNewNote = async () => {
@@ -17,6 +17,7 @@ const AddNotes = ({ onclose, type , getAllNotes }) => {
         tags,
       });
       if (response.data && response.data.note) {
+        showToast("Note added successfully");
         getAllNotes()
         onclose()
       }
@@ -25,7 +26,27 @@ const AddNotes = ({ onclose, type , getAllNotes }) => {
     }
   };
 
-  const editNote = () => {};
+
+  const editNote = async () => {
+
+    const noteId = noteData._id;
+    console.log(noteId)
+
+     try {
+      const response = await axiosInstance.put("/edit-note/" + noteId, {
+        title,
+        content,
+        tags,
+      });
+       if (response.data && response.data.note) {
+        showToast("Note updated successfully");
+        getAllNotes()
+        onclose()
+      }
+    } catch (error) {
+      setError("An error occurred while editing the note");
+    }
+  };
 
   const addNote = () => {
     if (!title) {
@@ -38,7 +59,7 @@ const AddNotes = ({ onclose, type , getAllNotes }) => {
     }
     setError(null);
 
-    if (!type === "edit") {
+    if (type === "edit") {
       editNote();
     } else {
       addNewNote();
@@ -85,7 +106,7 @@ const AddNotes = ({ onclose, type , getAllNotes }) => {
       </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <button className=" btn-primary font-medium mt-5 " onClick={addNote}>
-        ADD
+       {type == "edit" ? "UPDATE" : "ADD" }
       </button>
     </div>
   );
