@@ -128,7 +128,7 @@ const Home = () => {
   useEffect(() => {
     getAllNotes();
     getUser();
-    
+    return () => { };
   }, []);
 
 
