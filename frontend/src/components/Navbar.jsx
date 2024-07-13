@@ -9,7 +9,7 @@ const Navbar = ({ user, onSearch, handleXSearch }) => {
   const navigate = useNavigate();
   const onLogout = () => {
     localStorage.clear();
-    navigate('/login');
+    navigate('/');
   }
 
   const onClearSearch = () => { 
@@ -24,11 +24,11 @@ const Navbar = ({ user, onSearch, handleXSearch }) => {
 
 
   return (
-      <div className="flex items-center justify-between bg-sky-800 drop-shadow-md py-2 px-6 rounded-b-md">
+      <div className="flex justify-between items-center bg-sky-800 drop-shadow-md px-6 py-2 rounded-b-md">
           <div className='flex gap-3'>
               
-          <img src={TodoLogo} alt="logo" className=" h-10 w-10"/> 
-          <h1 className="hidden lg:flex text-blue-100 font-semibold text-2xl py-2">Taskin</h1>
+          <img src={TodoLogo} alt="logo" className="w-10 h-10"/> 
+          <h1 className="lg:flex hidden py-2 font-semibold text-2xl text-blue-100">Taskin</h1>
       </div>
       <SearchBar value={query}
         onChange={({ target }) => {

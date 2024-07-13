@@ -45,10 +45,10 @@ const Login = () => {
     <div>
       <Navbar  />
 
-      <div className="flex items-center justify-center mt-20 p-5">
-        <div className="w-96 border border-blue-950 bg-sky-700 rounded-md py-7 px-7 ">
+      <div className="flex justify-center items-center mt-20 p-5">
+        <div className="bg-sky-700 px-7 py-7 border border-blue-950 rounded-md w-96">
           <form onSubmit={handleLogin}>
-            <h2 className="text-white text-xl font-medium mb-2 ">Login</h2>
+            <h2 className="mb-2 font-medium text-white text-xl">Login</h2>
             <input
               type="email"
               className="field"
@@ -63,11 +63,11 @@ const Login = () => {
                       
             {error && <p className="text-cyan-300 text-sm">{error}</p>}
             <button className="btn-primary">Login</button>
-            <p className="text-white text-sm mt-2">
+            <p className="mt-2 text-sm text-white">
               Donot have an account?
               <Link
                 to="/signup"
-                className="text-blue-100 underline underline-offset-2 ml-2"
+                className="ml-2 text-blue-100 underline underline-offset-2"
               >
                 SignUp
               </Link>

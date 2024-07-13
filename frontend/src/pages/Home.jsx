@@ -112,7 +112,7 @@ const Home = () => {
       const response = await axiosInstance.put(
         "/update-note-pin-status/" + noteId,
         {
-        isPinned: !noteId.isPinned
+          isPinned: !noteData.isPinned,
         }
       );
       if (response.data && response.data.note) {
@@ -135,8 +135,8 @@ const Home = () => {
   return (
     <>
       <Navbar user={user} onSearch={onSearch} handleXSearch={handleXSearch} />
-      <div className="container mx-auto p-3">
-        {notes.length > 0 ? (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-10">
+      <div className="mx-auto p-3 container">
+        {notes.length > 0 ? (<div className="gap-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-10">
           {notes.map((item) => (
             <NoteCard
               key={item._id}
@@ -154,12 +154,12 @@ const Home = () => {
       </div>
 
       <button
-        className="w-12 h-12 flex items-center justify-center absolute right-10 bottom-10 bg-sky-800 hover:bg-blue-950 rounded-full hover:shadow-md"
+        className="right-10 bottom-10 absolute flex justify-center items-center bg-sky-800 hover:bg-blue-950 hover:shadow-md rounded-full w-12 h-12"
         onClick={() => {
           setOpenModel({ isShow: true, type: "add", data: null });
         }}
       >
-        <Plus size={35} className="text-sky-100 " />
+        <Plus size={35} className="text-sky-100" />
       </button>
 
       <Modal
@@ -172,7 +172,7 @@ const Home = () => {
         }}
         ariaHideApp={false}
         contentLabel="Add Note Modal"
-        className="xl:w-[50%] md:w-[70%] w-[90%] max-h-3/4 bg-sky-50 rounded-md mx-auto p-5 mt-14 "
+        className="bg-sky-50 mx-auto mt-14 p-5 rounded-md w-[90%] md:w-[70%] xl:w-[50%] max-h-3/4"
       >
         <AddNotes
           type={openModel.type}
