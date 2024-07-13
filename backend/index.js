@@ -177,7 +177,7 @@ app.get("/get-notes", authenticateToken, async (req, res) => {
     const { user } = req.user;
     try {
         
-        const note = await Note.find({ userId: user._id });
+        const note = await Note.find({ userId: user._id }).sort({ isPinned: -1, createdOn: -1 });
         return res.json({ error: false, note, message: "Notes fetched successfully" });
     }
     catch (error) {
@@ -223,7 +223,7 @@ app.put("/update-note-pin-status/:noteId/", authenticateToken, async (req, res) 
             return res.status(400).json({ error: true, message: "Note not found" });
         }
 
-       if(isPinned) note.isPinned = isPinned;
+        note.isPinned = isPinned;
 
         await note.save();
 
