@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://task-app-one-henna.vercel.app/",
+  baseURL: "https://task-app-api-tau.vercel.app/",
   headers: {
     "Content-Type": "application/json",
   },
